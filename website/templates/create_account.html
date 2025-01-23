@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+
+<section id="create-account" class="container-fluid py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-body p-5">
+          <h2 class="text-center mb-4 fw-bold text-dark">Create Account</h2>
+          <form action='/create_account' method='post' id="create-account-form">
+            <div class="mb-4">
+              <label for="username" class="form-label text-muted">Username</label>
+              <input type="text" class="form-control form-control-lg rounded-3" id="username" name='username' placeholder="Enter your username" required>
+            </div>
+            <div class="mb-4">
+              <label for="first_name" class="form-label text-muted">First Name</label>
+              <input type="text" class="form-control form-control-lg rounded-3" id="first_name" name='first_name' placeholder="Enter your first name" required>
+            </div>
+            <div class="mb-4">
+              <label for="last_name" class="form-label text-muted">Last Name</label>
+              <input type="text" class="form-control form-control-lg rounded-3" id="last_name" name='last_name' placeholder="Enter your last name" required>
+            </div>
+            <div class="mb-4">
+              <label for="email" class="form-label text-muted">Email Address</label>
+              <input type="email" class="form-control form-control-lg rounded-3" id="email" name="email" placeholder="Enter your email address" required>
+            </div>
+            <div class="mb-4">
+              <label for="dob" class="form-label text-muted">Date of Birth</label>
+              <input type="date" class="form-control form-control-lg rounded-3" id="dob" name="dob" required>
+            </div>
+            <div class="mb-4">
+              <label for="password" class="form-label text-muted">Password</label>
+              <input type="password" class="form-control form-control-lg rounded-3" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <div class="mb-4">
+              <label for="confirm-password" class="form-label text-muted">Confirm Password</label>
+              <input type="password" class="form-control form-control-lg rounded-3" id="confirm-password" placeholder="Confirm your password" required>
+            </div>
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="terms" required>
+                <label class="form-check-label text-muted" for="terms">I agree to the Terms and Conditions</label>
+              </div>
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg rounded-3" id="create-account-btn">Create Account</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById('create-account-btn').addEventListener('click', function(event) {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const terms = document.getElementById('terms');
+    
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      event.preventDefault();
+      alert("Passwords do not match");
+      return;
+    }
+
+    // Check if terms are accepted
+    if (!terms.checked) {
+      event.preventDefault();
+      alert("You must agree to the terms and conditions.");
+      return;
+    }
+  });
+</script>
+
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f1f1f1;
+  }
+
+  #create-account {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding: 5rem 0;
+  }
+
+  .container-fluid {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .form-control {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    color: #495057;
+    font-size: 1.1rem;
+  }
+
+  .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+    background-color: #ffffff;
+  }
+
+  #create-account-btn {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  #create-account-btn:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+
+  .card {
+    background-color: #ffffff;
+    border-radius: 1.25rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-body {
+    padding: 2rem;
+  }
+
+  .text-muted {
+    color: #6c757d !important;
+  }
+
+  .fw-bold {
+    font-weight: 600;
+  }
+
+  .rounded-3 {
+    border-radius: 1.25rem !important;
+  }
+
+  .rounded-4 {
+    border-radius: 1.5rem !important;
+  }
+
+  .d-grid {
+    display: grid;
+  }
+
+  .gap-2 {
+    gap: 0.5rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+</style>
+
+{% endblock %}

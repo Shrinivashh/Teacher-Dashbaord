@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %} Add Marks for {{ student.first_name }} {{ student.last_name }}{% endblock %}
+
+{% block content %}
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-light border-end" style="width: 250px; transition: width 0.3s; height: 100vh; overflow: hidden;">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <span id="sidebar-title" class="fw-bold">Teacher Dashboard</span>
+            <button class="btn btn-sm btn-outline-secondary" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="p-3">
+            <!-- Sidebar Links -->
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chalkboard-teacher me-2"></i>
+                <span class="link-text">Classes</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-user-graduate me-2"></i>
+                <span class="link-text">Students</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-tasks me-2"></i>
+                <span class="link-text">Assignments</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-calendar-check me-2"></i>
+                <span class="link-text">Attendance</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chart-line me-2"></i>
+                <span class="link-text">Performance</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chart-pie me-2"></i>
+                <span class="link-text">Analytics</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-file-download me-2"></i>
+                <span class="link-text">Download Reports</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-folder-open me-2"></i>
+                <span class="link-text">Uploaded Materials</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-upload me-2"></i>
+                <span class="link-text">Add Resources</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-user-cog me-2"></i>
+                <span class="link-text">Profile</span>
+            </a>
+            <a href="{{ url_for('auth.logout')}}" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-danger rounded">
+                <i class="fas fa-sign-out-alt me-2"></i>
+                <span class="link-text text-danger">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1 p-4">
+        {% if past_exams_without_marks %}
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Add Marks for {{ student.first_name }} {{ student.last_name }}</h3>
+                </div>
+                <form action="{{ url_for('views.add_marks', student_id=student.id) }}" method="POST">
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    {% for exam in past_exams_without_marks %}
+                                        <th>{{ exam.name }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subject in subjects %}
+                                    <tr>
+                                        <td>{{ subject.name }}</td>
+                                        {% for exam in past_exams_without_marks %}
+                                            <td>
+                                                <input type="number" name="marks[{{ subject.id }}][{{ exam.id }}]" class="form-control" value="{{ marks[subject.id][exam.id] }}">
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <button type="submit" class="btn btn-primary">Save Marks</button>
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <p class="bg-warning text-dark rounded p-2 mt-4">No exams to enter marks.</p>
+        {% endif %}
+
+        {% if upcoming_exams %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Upcoming Exams</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exam in upcoming_exams %}
+                                <tr>
+                                    <td>{{ exam.name }}</td>
+                                    <td>{{ exam.date }}</td>
+                                    <td>{{ exam.time }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <p class="bg-warning text-dark rounded p-2 mt-4">No upcoming exams scheduled.</p>
+        {% endif %}
+
+        {% if ongoing_exams %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Ongoing Exams</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exam in ongoing_exams %}
+                                <tr>
+                                    <td>{{ exam.name }}</td>
+                                    <td>{{ exam.date }}</td>
+                                    <td>{{ exam.time }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <p class="bg-warning text-dark rounded p-2 mt-4">No ongoing exams found.</p>
+        {% endif %}
+
+        {% if past_exams %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Past Exams</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exam in past_exams %}
+                                <tr>
+                                    <td>{{ exam.name }}</td>
+                                    <td>{{ exam.date }}</td>
+                                    <td>{{ exam.time }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <p class="bg-warning text-dark rounded p-2 mt-4">No past exams found.</p>
+        {% endif %}
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block title %}{{ class_details.name}}{% endblock %}
+
+{% block content %}
+<div class="d-flex">
+    <aside id="sidebar" class="bg-light border-end" style="width: 250px; transition: width 0.3s; height: 100vh; overflow: hidden;">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <span id="sidebar-title" class="fw-bold">Teacher Dashboard</span>
+            <button class="btn btn-sm btn-outline-secondary" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="p-3">
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chalkboard-teacher me-2"></i>
+                <span class="link-text">Classes</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-user-graduate me-2"></i>
+                <span class="link-text">Students</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-tasks me-2"></i>
+                <span class="link-text">Assignments</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-calendar-check me-2"></i>
+                <span class="link-text">Attendance</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chart-line me-2"></i>
+                <span class="link-text">Performance</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chart-pie me-2"></i>
+                <span class="link-text">Analytics</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-file-download me-2"></i>
+                <span class="link-text">Download Reports</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-folder-open me-2"></i>
+                <span class="link-text">Uploaded Materials</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-upload me-2"></i>
+                <span class="link-text">Add Resources</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-user-cog me-2"></i>
+                <span class="link-text">Profile</span>
+            </a>
+            <a href="{{ url_for('auth.logout')}}" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-danger rounded">
+                <i class="fas fa-sign-out-alt me-2"></i>
+                <span class="link-text text-danger">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    
+        <main class="flex-grow-1 p-4">
+        <div class="container-fluid">
+            <h1 class="fw-bold">{{ class_details.name }}</h1>
+            <h2 class="fw-bold">Welcome {{ subjects_and_teachers}}
+                
+            </h2>
+            
+            <h4 class="mt-4">Student List for {{ subjects_and_teachers.name}} subject</h4>
+
+
+            <form method="POST" action="{{ url_for('views.attendance_batch', class_id=class_details.id) }}">
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Attendance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ student.first_name }}</td>
+                                <td>{{ student.last_name }}</td>
+                                <td>{{ student.email }}</td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Attendance">
+                                        <!-- Radio button for 'Present' -->
+                                        <input type="radio" class="btn-check" name="attendance_{{ student.id }}" id="present_{{ student.id }}" autocomplete="off" value="present"
+                                            {% if student.attendance_status == 'present' %}checked{% endif %}>
+                                            {% if student.attendance_status == 'present' %}
+                                                <label class="btn btn-success" for="present_{{ student.id }}">Present</label>
+                                            {% else %}
+                                                 <label class="btn btn-outline-success" for="present_{{ student.id }}">Present</label>
+                                            {% endif %}
+                                               
+                                        
+                                        <!-- Radio button for 'Absent' -->
+                                        <input type="radio" class="btn-check" name="attendance_{{ student.id }}" id="absent_{{ student.id }}" autocomplete="off" value="absent"
+                                            {% if student.attendance_status == 'absent' %}checked{% endif %}>
+
+                                            {% if student.attendance_status == 'absent' %}
+                                                <label class="btn btn-danger" for="absent_{{ student.id }}">Absent</label>
+                                            {% else %}
+                                                <label class="btn btn-outline-danger" for="absent_{{ student.id }}">Absent</label>
+                                            {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('views.marks',student_id=student.id) }}" class="btn btn-primary btn-sm">Add marks</a>
+                                    <a href="{{ url_for('views.student', student_id=student.id) }}" class="btn btn-warning btn-sm">Info</a>
+                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary">Save Attendance</button>
+            </form>
+            
+
+            
+            
+            
+        </div>
+    </main>
+</div>
+
+<script src="{{ url_for('static',filename='js/sidebar.js')}}"></script>
+{% endblock %}

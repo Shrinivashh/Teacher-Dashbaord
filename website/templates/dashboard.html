@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+<div class="d-flex">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-light border-end" style="width: 250px; transition: width 0.3s; height: 100vh; overflow: hidden;">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <span id="sidebar-title" class="fw-bold">Teacher Dashboard</span>
+            <button class="btn btn-sm btn-outline-secondary" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="p-3">
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chalkboard-teacher me-2"></i>
+                <span class="link-text">Classes</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-user-graduate me-2"></i>
+                <span class="link-text">Students</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-tasks me-2"></i>
+                <span class="link-text">Assignments</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-calendar-check me-2"></i>
+                <span class="link-text">Attendance</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chart-line me-2"></i>
+                <span class="link-text">Performance</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chart-pie me-2"></i>
+                <span class="link-text">Analytics</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-file-download me-2"></i>
+                <span class="link-text">Download Reports</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-folder-open me-2"></i>
+                <span class="link-text">Uploaded Materials</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-upload me-2"></i>
+                <span class="link-text">Add Resources</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-user-cog me-2"></i>
+                <span class="link-text">Profile</span>
+            </a>
+            <a href="{{ url_for('auth.logout')}}" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-danger rounded">
+                <i class="fas fa-sign-out-alt me-2"></i>
+                <span class="link-text text-danger">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+<main class="flex-grow-1 p-4">
+    <div class="container-fluid">
+        <!-- Welcome Section -->
+        <div class="mb-4">
+            <h1 class="fw-bold">Welcome, {{ session.get('username')}}</h1>
+            <p class="text-muted">Here’s an overview of your recent activities and quick access to key features.</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body d-flex align-items-center bg-primary text-white rounded">
+                        <i class="fas fa-chalkboard fa-3x me-3"></i>
+                        <div>
+                            <h5 class="card-title mb-0">{{ session.get('total_classes')}}</h5>
+                            <small class="text-white">Active Classes</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body d-flex align-items-center bg-warning text-dark rounded">
+                        <i class="fas fa-user-graduate fa-3x text-dark me-3"></i>
+                        <div>
+                            <h5 class="card-title mb-0">{{session.get('total_students')}}</h5>
+                            <small class="text-muted">Total Students</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body d-flex align-items-center bg-success text-white rounded">
+                        <i class="fas fa-tasks fa-3x text-white me-3"></i>
+                        <div>
+                            <h5 class="card-title mb-0">8</h5>
+                            <small class="text-white">Pending Assignments</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="container mt-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">Notifications</h2>
+                        
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-strped">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Date</th>
+                                    <th>Content</th>
+                                </tr>
+                                
+                            </thead>
+                            <tbody>
+                                {% for notification in teacher_notifications %}
+                                  <tr>
+                                    <td>{{ notification.title }}</td>
+                                    <td>{{ notification.date }}</td>
+                                    <td>{{ notification.content }}</td>
+                                  </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Key Features -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Classes</h5>
+                        <p class="card-text text-muted">View and organize your classes efficiently.</p>
+                        <a href="{{ url_for('views.classes') }}" class="btn btn-primary">Go to Classes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Track Attendance</h5>
+                        <p class="card-text text-muted">Keep an eye on student attendance.</p>
+                        <a href="{{ url_for('views.attendance_page',teacher_id=session.get('id')) }}" class="btn btn-primary">View Attendance</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Analyze Performance</h5>
+                        <p class="card-text text-muted">Review performance metrics and insights.</p>
+                        <a href="{{ url_for('views.performance',teacher_id=session.get('id')) }}" class="btn btn-primary">View Reports</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Upload Resources</h5>
+                        <p class="card-text text-muted">Share learning materials with students.</p>
+                        <a href="#" class="btn btn-primary">Upload Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <h3 class="fw-bold">Upcoming Events and Exams</h3>
+
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">Events</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Location</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for event in events_upcoming %}
+                                   <tr>
+                                        <td>{{ event.name }}</td>
+                                        <td>{{ event.date }}</td>
+                                        <td>{{ event.time }}</td>
+                                        <td>{{ event.location }}</td>
+                                        <td>{{ event.description }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mt-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">Upcoming Exams</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for exam in exams_upcoming %}
+                                <tr>
+                                    <td>{{ exam.name }}</td>
+                                    <td>{{ exam.date }}</td>
+                                    <td>{{ exam.time }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+
+
+    </div>
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<script src="{{ url_for('static',filename='js/sidebar.js') }}"></script>
+{% endblock %}

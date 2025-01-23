@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Attendance Tracker
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]} );
+    google.charts.setOnLoadCallback(drawChart);
+    var present = {{ attendance_percentage| tojson}};
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Attendance', 'Percentage'],
+        ['Present',     present],
+        ['Absent',      100-present],
+      ]);
+
+      var options = {
+        title: 'Attendance History',
+        pieHole: 0.4,
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+      chart.draw(data, options);
+    }
+  </script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        
+        var data = google.visualization.arrayToDataTable({{ chart_data|tojson }});
+
+        var options = {
+            title: 'Daily Attendance',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        chart.draw(data, options);
+    }
+</script>
+
+<div class="d-flex">
+    <aside id="sidebar" class="bg-light border-end " style="width: 250px; transition: width 0.3s; height: 100vh; overflow: hidden;">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <span id="sidebar-title" class="fw-bold">Teacher Dashboard</span>
+            <button class="btn btn-sm btn-outline-secondary" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="p-3">
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chalkboard-teacher me-2"></i>
+                <span class="link-text">Classes</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-user-graduate me-2"></i>
+                <span class="link-text">Students</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-tasks me-2"></i>
+                <span class="link-text">Assignments</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-calendar-check me-2"></i>
+                <span class="link-text">Attendance</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chart-line me-2"></i>
+                <span class="link-text">Performance</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chart-pie me-2"></i>
+                <span class="link-text">Analytics</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-file-download me-2"></i>
+                <span class="link-text">Download Reports</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-folder-open me-2"></i>
+                <span class="link-text">Uploaded Materials</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-upload me-2"></i>
+                <span class="link-text">Add Resources</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-user-cog me-2"></i>
+                <span class="link-text">Profile</span>
+            </a>
+            <a href="{{ url_for('auth.logout')}}" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-danger rounded">
+                <i class="fas fa-sign-out-alt me-2"></i>
+                <span class="link-text text-danger">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+
+
+    <main class="flex-grow-1 p-4">
+
+
+        <div class="chart container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"> Overall attendance for {{ session.get('username')}}'s classes</h4>
+                </div>
+                <div class="card-body d-flex flex-grow-1">
+                    <div id="donutchart" class="w-50"  style="width: 50%; height: 450px;"></div>
+                    <div id="curve_chart" style="width: 50%; height: 450px;"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Attendance for Each Class</h4>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-striped w-50">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Present</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in class_attendance_with_percentage %}
+                            <tr>
+                                <td>{{ i.class_name}}</td>
+                                <td>{{ i.attendance_percentage}}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">
+                     Today's attendance for Each Student
+                    </h4>
+                </div>
+                <div class="card-body d-flex gap-3">
+                    {% for class, details in student_wise_attendance.items() %}
+                      <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th colspan="2">{{ class}}</th>
+                            </tr>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Attendance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in details %}
+                              <tr>
+                                <td>{{i.first_name}} {{ i.last_name }}</td>
+                                <td>
+                                    {% if i.attendance_status  == 'present' %}
+                                        <span class="btn btn-success text-white">Present</span>
+                                    {% else %}
+                                        <span class="btn btn-danger text-white">Absent</span>
+                                    {% endif %}
+                                </td>
+                              </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        Each students Attendance Percentage
+                    </h4>
+                </div>
+                <div class="card-body d-flex gap-3">
+                    {% for class,data in students_attendance_percentage.items() %}
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th colspan="2">{{ class }}</th>
+                            </tr>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Attendance Percentage</th>
+                        </thead>
+                        <tbody>
+                            {% for i in data%}
+                             <tr>
+                                <td>{{ i.first_name }} {{ i.last_name }}</td>
+                                <td>{{ i.attendance_percentage }}%</td>
+                             </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+
+            
+        </div> 
+    </main>
+</div>
+
+
+
+<script src="{{ url_for('static',filename='js/sidebar.js') }}"></script>
+
+
+{% endblock %}

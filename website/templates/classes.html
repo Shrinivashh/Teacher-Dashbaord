@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Classes{% endblock %}
+
+{% block content %}
+<div class="d-flex">
+    <aside id="sidebar" class="bg-light border-end" style="width: 250px; transition: width 0.3s; height: 100vh; overflow: hidden;">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+        <span id="sidebar-title" class="fw-bold">Teacher Dashboard</span>
+        <button class="btn btn-sm btn-outline-secondary" id="toggleSidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        </div>
+        <div class="p-3">
+        <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+            <i class="fas fa-chalkboard-teacher me-2"></i>
+            <span class="link-text">Classes</span>
+        </a>
+        <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+            <i class="fas fa-user-graduate me-2"></i>
+            <span class="link-text">Students</span>
+        </a>
+        <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+            <i class="fas fa-tasks me-2"></i>
+            <span class="link-text">Assignments</span>
+        </a>
+        <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+            <i class="fas fa-calendar-check me-2"></i>
+            <span class="link-text">Attendance</span>
+        </a>
+        <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+            <i class="fas fa-chart-line me-2"></i>
+            <span class="link-text">Performance</span>
+        </a>
+        <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+            <i class="fas fa-chart-pie me-2"></i>
+            <span class="link-text">Analytics</span>
+        </a>
+        <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+            <i class="fas fa-file-download me-2"></i>
+            <span class="link-text">Download Reports</span>
+        </a>
+        <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+            <i class="fas fa-folder-open me-2"></i>
+            <span class="link-text">Uploaded Materials</span>
+        </a>
+        <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+            <i class="fas fa-upload me-2"></i>
+            <span class="link-text">Add Resources</span>
+        </a>
+        <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+            <i class="fas fa-user-cog me-2"></i>
+            <span class="link-text">Profile</span>
+        </a>
+        <a href="{{ url_for('auth.logout')}}" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-danger rounded">
+            <i class="fas fa-sign-out-alt me-2"></i>
+            <span class="link-text text-danger">Logout</span>
+        </a>
+        </div>
+    </aside>
+
+
+    <main class="flex-grow-1 p-4">
+        <div class="container-fluid">
+            <h1 class="fw-bold">Classes</h1>
+            <p class="text-muted">View, create, and manage your school classes.</p>
+        </div>
+    
+        <div class="container-fluid">
+           
+            
+    
+            <!-- View Classes -->
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">View Classes</h5>
+                    <p class="card-text text-muted">Below is a list of your existing classes.</p>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Class Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for class in classes %}
+                                <tr>
+                                    <td>{{ class.name }}</td>
+                                    <td>
+                                        <a href="{{ url_for('views.show_class',class_id=class.id) }}" class="btn btn-sm btn-primary me-2">Show class</a>
+                                        <a href="{{ url_for('views.delete',class_id=class.id) }}" class="btn btn-sm btn-outline-danger">Delete</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center">No classes found.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    
+    
+
+</div>
+
+
+
+<script src="{{ url_for('static',filename='js/sidebar.js')}}"></script>
+
+{% endblock %}
