@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Events
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-column p-5">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Past Events</h2>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Location</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for event in past_events %}
+                        <tr>
+                            <td>{{ event.name }}</td>
+                            <td>{{ event.date }}</td>
+                            <td>{{ event.time }}</td>
+                            <td>{{ event.location}}</td>
+                            <td>{{ event.description}}</td>
+                        </tr>
+                     {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Upcoming Events</h2>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Location</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for event in upcoming_events %}
+                         <tr>
+                            <td>{{ event.name }}</td>
+                            <td>{{ event.date }}</td>
+                            <td>{{ event.time }}</td>
+                            <td>{{ event.location}}</td>
+                            <td>{{ event.description}}</td>
+
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Add Event</h2>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('admin.add_event') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Event Name</label>
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Enter event Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Event Date</label>
+                        <input type="date" name="date" id="date" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="time" class="form-label">Event Time</label>
+                        <input type="text" name="time" id="time" class="form-control" placeholder="Enter event Time (e.g., 10:00 AM)" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Location" class="form-label">Location</label>
+                        <input type="text" name="location" id="location" class="form-control" placeholder="Enter event Location" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea name="description" id="description" class="form-control" rows="5" placeholder="Description.." required></textarea>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary w-100">Add Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

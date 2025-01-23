@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title  %}
+Subjects
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="d-flex">
+    <aside id="sidebar" class="bg-light border-end" style="width: 250px; transition: width 0.3s; height: 100vh; overflow: hidden;">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <span id="sidebar-title" class="fw-bold">Teacher Dashboard</span>
+            <button class="btn btn-sm btn-outline-secondary" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="p-3">
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chalkboard-teacher me-2"></i>
+                <span class="link-text">Classes</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-user-graduate me-2"></i>
+                <span class="link-text">Students</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-tasks me-2"></i>
+                <span class="link-text">Assignments</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-calendar-check me-2"></i>
+                <span class="link-text">Attendance</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chart-line me-2"></i>
+                <span class="link-text">Performance</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-chart-pie me-2"></i>
+                <span class="link-text">Analytics</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-file-download me-2"></i>
+                <span class="link-text">Download Reports</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-folder-open me-2"></i>
+                <span class="link-text">Uploaded Materials</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-upload me-2"></i>
+                <span class="link-text">Add Resources</span>
+            </a>
+            <a href="#" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-dark rounded">
+                <i class="fas fa-user-cog me-2"></i>
+                <span class="link-text">Profile</span>
+            </a>
+            <a href="{{ url_for('auth.logout')}}" class="d-flex align-items-center p-2 mb-1 text-decoration-none text-danger rounded">
+                <i class="fas fa-sign-out-alt me-2"></i>
+                <span class="link-text text-danger">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+
+    <main class="flex-grow-1 p-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="fw-bold">Add Subjects</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('admin.add_subject') }}" method="POST">
+                    <!-- Subject Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Subject Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter subject name" required>
+                    </div>
+                    
+                    <!-- Subject Code -->
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Subject Code</label>
+                        <input type="text" class="form-control" id="code" name="code" placeholder="Enter subject code" required>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter subject description"></textarea>
+                    </div>
+                    
+                    <!-- Teacher Selection -->
+                    <div class="mb-3">
+                        <label for="teacher_id" class="form-label">Assign Teacher</label>
+                        <select class="form-select" id="teacher_id" name="teacher_id" required>
+                            <option value="" disabled selected>Select a teacher</option>
+                            {% for teacher in teachers %}
+                              <option value="{{ teacher.id }}">{{ teacher.first_name}} {{ teacher.last_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Class selection -->
+                    <div class="mb-3">
+                        <label for="class_id" class="form-label">Assign class</label>
+                        <select class="form-select" id="class_id" name="class_id" required>
+                            <option value="" disabled selected>Select a classs</option>
+                            {% for class in classes %}
+                              <option value="{{ class.id }}">{{ class.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+    
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Add Subject</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+</div>
+
+{% endblock %}

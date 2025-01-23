@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Student{% endblock %}
+
+{% block content %}
+    <div class="container-fluid p-5">
+        <h2 class="text-center">Add New Student</h2>
+
+    <form action="{{ url_for('admin.add_student') }}" method="post">
+        <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="class_id" class="form-label">Assigned Class</label>
+            <select class="form-control" id="class_id" name="class_id" required>
+                <option value="" disabled selected>Select Class</option>
+                {% for class_ in classes %}
+                    <option value="{{ class_.id }}">{{ class_.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+        </div>
+
+        
+
+        <button type="submit" class="btn btn-primary w-100">Add Student</button>
+    </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+assign subject
+{% endblock %}
+
+
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card w-50">
+        <div class="card-header">
+            <h4 class="card-title">Assign Teacher</h4>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('admin.assign_subject')}}" method="post">
+
+                <div class="mb-3">
+                    <label for="subject_id" class="form-label">Select a  Subject</label>
+                    <select class="form-select" id="subject_id" name="subject_id" required>
+                        <option value="" disabled selected>Select a subject</option>
+                        {% for subject in subjects %}
+                          <option value="{{ subject.id }}">{{ subject.name}} ({{ subject.code}})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+
+                <div class="mb-3">
+                    <label for="teacher_id" class="form-label">Select a  Teacher</label>
+                    <select class="form-select" id="teacher_id" name="teacher_id" required>
+                        <option value="" disabled selected>Select a teacher</option>
+                        {% for teacher in teachers %}
+                          <option value="{{ teacher.id }}">{{ teacher.first_name}} {{ teacher.last_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Assign</button>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
